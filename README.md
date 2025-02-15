@@ -75,6 +75,7 @@ A basic raymarching shader is included baldy made by me. For reference, see: [Sh
 ## Notes
 
 - My first C project — messy code and probably non optimal.
+- If main image returns a color that is not in the range 1.0 and 0.0 it may cause a crash.
 - Contributions welcome!
 
 ## Preview
