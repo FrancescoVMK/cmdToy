@@ -62,6 +62,7 @@ A basic raymarching shader is included baldy made by me. For reference, see: [Sh
   - [ ] Remove old macro function
   - [ ] Use only one naming scheme
   - [ ] See if passing result by reference is better or worse
+  - [ ] Create documentation
 - **Textures**:
   - [ ] Implement `iChannel` support.
 - **Threads**:
