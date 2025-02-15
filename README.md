@@ -1,10 +1,16 @@
 # cmdToy
 
 cmdToy is a CPU-based command-line fragment shader renderer inspired by ShaderToy. It runs locally in your terminal and supports multiple rendering modes. While functional, the implementation is not optimal and could benefit from refactoring (its kinda bad).
-
+ 
 ---
 
 ## Features
+- **colors**
+  - It uses ANSI color codes to print out colored chars.
+  - It hase 8 unique colors: Black, Blue, Green, Cyan, Red, Magenta, Yellow, White. and for each it hase a light and dark version for a total of 16 colors!
+
+- **Ascii Scale**:
+  - The default ascii scale is:  ,.~!+:*Ivcow0XP$#RB@
 
 - **Multiple Rendering Modes**:
   - **0. Char Mode**: Prints one character at a time (single-threaded). *Slow*.
