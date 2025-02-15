@@ -66,7 +66,7 @@ A basic raymarching shader is included baldy made by me. For reference, see: [Sh
 - **Threads**:
   - [ ] Optimize thread management.
 - **Colors**
- - [ ] Make it print real rgb color by prinring cells of 3 chars of diffrent color. (only at high resolutions)
+  - [ ] Make it print real rgb color by prinring cells of 3 chars of diffrent color. (only at high resolutions)
 
 ---
 
