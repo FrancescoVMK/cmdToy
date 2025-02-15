@@ -399,19 +399,11 @@ vec3 mainImage(vec2 * fragCoord){
   // vec2 uv = fragCoord/iResolution.xy;
   vec2 uv = vec2_div(*fragCoord, iResolution);
 
-  // Time varying pixel color
-  //vec3 col = 0.5 + 0.5*cos(iTime+uv.xyx+vec3(0,2,4));
-  vec3 col = (vec3){
-    0.5 + 0.5 * cos(iTime + uv.x + 0),
-    0.5 + 0.5 * cos(iTime + uv.y + 2),
-    0.5 + 0.5 * cos(iTime + uv.x + 4),
-  };
-
   // Output to screen
-  //fragColor = vec4(col,1.0);
-  fragColor = (vec3){col.x, col.y, col.z};
+  fragColor = (vec3){uv.x, uv.y, abs(sin(iTime))};
 
   return fragColor;
+  
 }
 
 
@@ -448,10 +440,6 @@ char *colorToColoredChar(vec3* color){
   //static char buf[12]; //store buffer fore result g_pixeLenght + 1 end of string char = 12 //end of string ingored in newer verison so 11
   //buf[0] = '\0'; 
   static char buf[11];
-
-  color->x = fminf(color->x, 1.);
-  color->y = fminf(color->y, 1.);
-  color->z = fminf(color->z, 1.);
   
   float average = (color->x + color->y + color->z)/3;
 
@@ -476,10 +464,6 @@ char *colorToColoredChar(vec3* color){
 }
 
 char *setColorToColoredChar(vec3* color, char* buf){
-  color->x = fminf(color->x, 1.);
-  color->y = fminf(color->y, 1.);
-  color->z = fminf(color->z, 1.);
-  
   float average = (color->x + color->y + color->z)/3;
 
   //float averagec = fminf(fmaxf(fmaxf(color.x, color.y), color.z), 1.);
@@ -506,7 +490,6 @@ char *getPixel(int x,int y){
 
   vec2 uv = (vec2){(float)x, (float)y};
   vec3 color = mainImage(&uv);
-
   return colorToColoredChar(&color);
 }
 

@@ -898,6 +898,10 @@ vec3 mainImage(vec2 * fragCoord){
 
   fragColor = render(&uv);
 
+  fragColor.x = fminf(fragColor.x, 1.);
+  fragColor.y = fminf(fragColor.y, 1.);
+  fragColor.z = fminf(fragColor.z, 1.);
+
   return fragColor;
 }
 
@@ -935,10 +939,6 @@ char *colorToColoredChar(vec3* color){
   //static char buf[12]; //store buffer fore result g_pixeLenght + 1 end of string char = 12 //end of string ingored in newer verison so 11
   //buf[0] = '\0'; 
   static char buf[11];
-
-  color->x = fminf(color->x, 1.);
-  color->y = fminf(color->y, 1.);
-  color->z = fminf(color->z, 1.);
   
   float average = (color->x + color->y + color->z)/3;
 
@@ -963,9 +963,6 @@ char *colorToColoredChar(vec3* color){
 }
 
 char *setColorToColoredChar(vec3* color, char* buf){
-  color->x = fminf(color->x, 1.);
-  color->y = fminf(color->y, 1.);
-  color->z = fminf(color->z, 1.);
   
   float average = (color->x + color->y + color->z)/3;
 
