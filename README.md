@@ -10,7 +10,7 @@ cmdToy is a CPU-based command-line fragment shader renderer inspired by ShaderTo
   - It hase 8 unique colors: Black, Blue, Green, Cyan, Red, Magenta, Yellow, White. and for each it has a light and dark version for a total of 16 colors!
 
 - **Ascii Scale**:
-  - The default ascii scale is:  ,.~!+:*Ivcow0XP$#RB@
+  - The default ascii scale is: `  ,.~!+:*Ivcow0XP$#RB@`
 
 - **Multiple Rendering Modes**:
   - **0. Char Mode**: Prints one character at a time (single-threaded). *Slow*.
