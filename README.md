@@ -1,7 +1,5 @@
 # cmdToy
-
 cmdToy is a CPU-based command-line fragment shader renderer inspired by ShaderToy. It runs locally in your terminal and supports multiple rendering modes. While functional, the implementation is not optimal and could benefit from refactoring (its kinda bad).
- 
 ---
 
 ## Features
@@ -74,5 +72,8 @@ A basic raymarching shader is included baldy made by me. For reference, see: [Sh
 
 - My first C project — messy code and probably non optimal.
 - Contributions welcome!
+
+## Preview
+![2025-02-15-18-34-58](https://github.com/user-attachments/assets/eb642519-bbc2-4537-9764-a8cc061706f6)
 
 ---
