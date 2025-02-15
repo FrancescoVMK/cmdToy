@@ -59,9 +59,9 @@ A basic raymarching shader is included baldy made by me. For reference, see: [Sh
 - **Math Functions**:
   - [ ] Separate math utilities into a module.
   - [ ] Add missing ShaderToy math functions.
-  - [ ] remove old macro function
-  - [ ] use only one naming scheme
-  - [ ] see if passing result by reference is better or worse
+  - [ ] Remove old macro function
+  - [ ] Use only one naming scheme
+  - [ ] See if passing result by reference is better or worse
 - **Textures**:
   - [ ] Implement `iChannel` support.
 - **Threads**:
