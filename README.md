@@ -20,7 +20,7 @@ cmdToy is a CPU-based command-line fragment shader renderer inspired by ShaderTo
 - **Customizable Threads**: Adjust `g_maxThreadNumber` to control thread count.
 - **Print debug frame time**: Decomment the line `printf("Time taken: %f seconds\n", frameTime);` (it can cause some glitches in Threaded mode).
 
-- **quality**: Zoomout or zoomin in the cmd to change the quality.
+- **quality**: Zoomout or zoomin the cmd to change the quality.
 ---
 
 ## Build
@@ -65,6 +65,8 @@ A basic raymarching shader is included baldy made by me. For reference, see: [Sh
   - [ ] Implement `iChannel` support.
 - **Threads**:
   - [ ] Optimize thread management.
+- **Colors**
+ - [ ] Make it print real rgb color by prinring cells of 3 chars of diffrent color. (only at high resolutions)
 
 ---
 
