@@ -34,20 +34,7 @@ typedef struct Point{
 //render
 
 //CONSTANTS
-const vec4 g_backGroundColor = (vec4){0.4,0.4,1.0,1.0};
-
-const vec3 g_lightColorSpecular = (vec3){1.000,1.000,1.000};
-const vec3 g_lightColorDiffuse = (vec3){1.000,1.000,1.000};
-const vec3 g_ambient = (vec3){1.000,1.000,1.000};
-
-const float g_max_dist = 20.0;
-const float g_min_dist = 0.01;
 const float PI = 3.141592653589793;
-
-const float g_speculareScale = 1.0;
-const float g_diffiuseScale = 0.7;
-const float g_ambientscale = 0.5;
-
 const int g_maxThreadNumber = 10;
 
 //structs
@@ -57,11 +44,8 @@ static struct winsize w;
 static clock_t beginTime ;
 static float iTime;
 static vec2 iMouse = (vec2){0., 0.};
-static float g_angle = 0;
 static vec2 iResolution = (vec2){10., 10.};
 
-//possible change in main loop
-static vec3 g_lightSource = (vec3){10., 9., 10.};
 
 //math functions baldy implemented, should also be saparated in a library or something
 
@@ -671,8 +655,6 @@ int main(int argc, char *argv[]) {
   printf("columns %d\n", columns);
 
 
-  //one time variables
-  g_lightSource = (vec3){3.0, 4.0, 3.0}; 
   struct timespec beginTime, frameDebugTime;
     
   //chose print mode
@@ -753,11 +735,6 @@ int main(int argc, char *argv[]) {
     iTime = (currentTime.tv_sec - beginTime.tv_sec) + 
             (currentTime.tv_nsec - beginTime.tv_nsec) / 1e9;
     clock_gettime(CLOCK_MONOTONIC, &frameDebugTime);
-
-    g_angle = (iTime * 0.1) * PI ;
-    iMouse = (vec2){iTime * 1.5 ,1.5}; 
-    //iMouse = (vec2){0. ,2.}; 
-    //g_lightSource = (vec3){sin(iTime * 0.5) * 5. + 1., sin(iTime * 0.5) * 3., cos(iTime * 0.5) * 5. + 1.}; 
 
     //display frame
     //printf("\033[H"); //move cursor to top left
