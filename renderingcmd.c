@@ -8,6 +8,8 @@
 #include <uchar.h>
 #include <pthread.h>
 
+//structs
+
 typedef struct {
   float x, y, z, k;
 } vec4; 
@@ -64,8 +66,6 @@ const int g_pixeLenght = 11; //lenght of the string that rapresents a pixel, in 
 const char g_gscale[41] = " ,.~!+:*Ivcow0XP$#RB@,.~!+:*vcowI0XP$#RB@";
 //const char gscale[70] = " .`:,;'_^\"\\></-!~=)(|j?}{][ti+l7v1%yrfcJ32uIC$zwo96sngaT5qpkYVOL40&mG8*xhedbZUSAQPFDXWK#RNEHBM@";
 
-
-//structs
 
 //globals
 static struct winsize w;
@@ -427,7 +427,7 @@ vec3 mainImage(vec2 * fragCoord){
 }
 
 
-
+//render code
 char *colorToColoredChar(vec3* color){
   //static char buf[12]; //store buffer fore result g_pixeLenght + 1 end of string char = 12 //end of string ingored in newer verison so 11
   //buf[0] = '\0'; 
