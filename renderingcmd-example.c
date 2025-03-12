@@ -1264,7 +1264,7 @@ int main(int argc, char *argv[]) {
 
     //sleep(0.01);
     //fflush(stdout);
-    //printf("ITime: %f seconds", (float)clock());
+    //printf("ITime: %f seconds", (float)iTime);
     struct timespec frameEndTime;
     clock_gettime(CLOCK_MONOTONIC, &frameEndTime);
     double frameTime = (frameEndTime.tv_sec - frameDebugTime.tv_sec) + 
