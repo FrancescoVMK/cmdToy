@@ -35,7 +35,35 @@ typedef struct Point{
 
 //CONSTANTS
 const float PI = 3.141592653589793;
-const int g_maxThreadNumber = 10;
+//print
+const char* g_ansi_color_reset = "\x1b[0m"; //len 4
+const char *ansi_colors[16] = { //5 char lenght
+  "\033[30m",  //Black
+  "\033[34m",  //Blue
+  "\033[32m",  //Green
+  "\033[36m",  //Cyan
+  "\033[31m",  //Red
+  "\033[35m",  //Magenta
+  "\033[33m",  //Yellow
+  "\033[37m",  //White
+
+  "\033[90m",  //Bright Black (Gray)
+  "\033[94m",  //Bright Blue
+  "\033[92m",  //Bright Green
+  "\033[96m",  //Bright Cyan
+  "\033[91m",  //Bright Red
+  "\033[95m",  //Bright Magenta   
+  "\033[93m",  //Bright Yellow
+  "\033[97m",  //Bright White
+
+
+};
+const int g_pixeLenght = 11; //lenght of the string that rapresents a pixel, in this case: color ansi code 5 chars + 2 chars + end ansi code 4 chars 
+
+//const char gscale[183] = " .`:,;'_^></-!~=*)(|j?}{][ti+l7v1ryfcJ32uIC$TYzoasnVw96g5qpkOL40&mG8xhedbZUSAQPFDXWK#RNEHBM@.`:,;'_^></-!~=*)(|j?}{][ti+l7v1ryfcJ32uIC$zwoTYasnV96g5qpkOL40&mG8xhedbZUSAQPFDXWK#RNEHBM@";
+const char g_gscale[41] = " ,.~!+:*Ivcow0XP$#RB@,.~!+:*vcowI0XP$#RB@";
+//const char gscale[70] = " .`:,;'_^\"\\></-!~=)(|j?}{][ti+l7v1%yrfcJ32uIC$zwo96sngaT5qpkYVOL40&mG8*xhedbZUSAQPFDXWK#RNEHBM@";
+
 
 //structs
 
@@ -46,6 +74,14 @@ static float iTime;
 static vec2 iMouse = (vec2){0., 0.};
 static vec2 iResolution = (vec2){10., 10.};
 
+static int g_maxThreadNumber = 10;
+static int g_thread_rows = 0;
+static int g_thread_columns = 0;
+
+static int g_bufferLenght = 0;
+static char* g_printBuffer;
+static char* g_printBufferToPrint;
+static pthread_t g_printThread;
 
 //math functions baldy implemented, should also be saparated in a library or something
 
@@ -392,34 +428,6 @@ vec3 mainImage(vec2 * fragCoord){
 
 
 
-//print
-const char* g_ansi_color_reset = "\x1b[0m"; //len 4
-const char *ansi_colors[16] = { //5 char lenght
-  "\033[30m",  //Black
-  "\033[34m",  //Blue
-  "\033[32m",  //Green
-  "\033[36m",  //Cyan
-  "\033[31m",  //Red
-  "\033[35m",  //Magenta
-  "\033[33m",  //Yellow
-  "\033[37m",  //White
-
-  "\033[90m",  //Bright Black (Gray)
-  "\033[94m",  //Bright Blue
-  "\033[92m",  //Bright Green
-  "\033[96m",  //Bright Cyan
-  "\033[91m",  //Bright Red
-  "\033[95m",  //Bright Magenta   
-  "\033[93m",  //Bright Yellow
-  "\033[97m",  //Bright White
-
-
-};
-const int g_pixeLenght = 11; //lenght of the string that rapresents a pixel, in this case: color ansi code 5 chars + 2 chars + end ansi code 4 chars 
-
-//const char gscale[183] = " .`:,;'_^></-!~=*)(|j?}{][ti+l7v1ryfcJ32uIC$TYzoasnVw96g5qpkOL40&mG8xhedbZUSAQPFDXWK#RNEHBM@.`:,;'_^></-!~=*)(|j?}{][ti+l7v1ryfcJ32uIC$zwoTYasnV96g5qpkOL40&mG8xhedbZUSAQPFDXWK#RNEHBM@";
-const char g_gscale[41] = " ,.~!+:*Ivcow0XP$#RB@,.~!+:*vcowI0XP$#RB@";
-//const char gscale[70] = " .`:,;'_^\"\\></-!~=)(|j?}{][ti+l7v1%yrfcJ32uIC$zwo96sngaT5qpkYVOL40&mG8*xhedbZUSAQPFDXWK#RNEHBM@";
 char *colorToColoredChar(vec3* color){
   //static char buf[12]; //store buffer fore result g_pixeLenght + 1 end of string char = 12 //end of string ingored in newer verison so 11
   //buf[0] = '\0'; 
@@ -488,7 +496,6 @@ char *setPixel(int x,int y, char* buf){
 
 
 
-static char* g_printBuffer;
 
 //preplace the \n in the buffer at the right position inizialising the buffer useful for debugging
 void inzialazePrintBuffer(int rows, int columns){
@@ -512,8 +519,6 @@ void inzialazePrintBuffer(int rows, int columns){
 
 
 
-static int g_thread_rows = 0;
-static int g_thread_columns = 0;
 pthread_mutex_t lock;
 
 void* startThread(void* arg) {
@@ -550,13 +555,11 @@ void* startThread(void* arg) {
 
 
 
-static char* g_printBufferToPrint;
 void* printThreaded() {
   printf(g_printBufferToPrint);
   printf("\033[H"); 
 }
 
-static pthread_t printThread;
 void displayGridFrameThread(int rows, int columns) {
   pthread_t threads[g_maxThreadNumber];
   //pthread_mutex_init(&lock, NULL);
@@ -579,9 +582,9 @@ void displayGridFrameThread(int rows, int columns) {
   }
 
   
-  pthread_join(printThread, NULL);
-  memcpy(g_printBufferToPrint, g_printBuffer, columns * rows * g_pixeLenght + columns + 1);
-  pthread_create(&printThread, NULL, printThreaded, NULL);
+  pthread_join(g_printThread, NULL);
+  memcpy(g_printBufferToPrint, g_printBuffer, g_bufferLenght);
+  pthread_create(&g_printThread, NULL, printThreaded, NULL);
 
   //printf(g_printBuffer);
   //printf("\033[H"); 
@@ -659,7 +662,7 @@ int main(int argc, char *argv[]) {
     
   //chose print mode
   void (*display)();
-  int mode = 0;
+  int mode = 4;
   if(argc >= 2){
     mode = atoi(argv[1]);
   }
@@ -674,13 +677,13 @@ int main(int argc, char *argv[]) {
       break;
     case 1: //line mode
       printf("1 display line mode\n");
-      g_printBuffer = (char *)malloc(columns * g_pixeLenght + columns + 1); 
+      g_bufferLenght = columns * g_pixeLenght + columns + 1; 
       display = displayGridLine;
       break;
     case 2: //frame mode
       printf("2 display frame mode str concat\n");
 
-      g_printBuffer = (char *)malloc(columns * rows * g_pixeLenght + columns + 1);
+      g_bufferLenght = (columns + 1) * rows * g_pixeLenght;
       
       display = displayGridFrame;
       break;
@@ -688,34 +691,34 @@ int main(int argc, char *argv[]) {
     case 3: //frame mode
       printf("3 display frame mode mem copy\n");
 
-      g_printBuffer = (char *)malloc(columns * rows * g_pixeLenght + columns + 1);
-
-      inzialazePrintBuffer(rows, columns);
+      g_bufferLenght = (columns + 1) * rows * g_pixeLenght;
       display = displayGridFrameMemCopy;
       break;
       
     case 4://theread mode
       printf("4 display frame thread mode\n");
 
-      g_printBuffer = (char *)malloc(columns * rows * g_pixeLenght + columns + 1);
+      g_bufferLenght = (columns + 1) * rows * g_pixeLenght;
 
-      inzialazePrintBuffer(rows, columns);//preplace the \n in the buffer at the right position
-      
+    
       display = displayGridFrameThread;
 
+      if(argc >= 3){
+	    g_maxThreadNumber = atoi(argv[2]);
+      }
+      printf("Max threads number: %d \n",  g_maxThreadNumber);
       //pre print
-      g_printBufferToPrint = (char *)malloc(columns * rows * g_pixeLenght + columns + 1);
-      pthread_create(&printThread, NULL, printThreaded, NULL);
+      g_printBufferToPrint = (char *)malloc((columns + 1) * rows * g_pixeLenght);
+      pthread_create(&g_printThread, NULL, printThreaded, NULL);
 
 
-      break;
-    default: //dafault char mode
-      printf("dafault display char mode\n");
-      display = displayGridChar;
       break;
   }
-
-
+  
+  if(g_bufferLenght > 0){
+    g_printBuffer = (char *)malloc(g_bufferLenght);
+    inzialazePrintBuffer(rows, columns);//preplace the \n in the buffer at the right position
+  }    
   printf("Start in 2 sec\n");
     
   sleep(2);
