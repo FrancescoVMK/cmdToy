@@ -1251,6 +1251,13 @@ int main(int argc, char *argv[]) {
             (currentTime.tv_nsec - beginTime.tv_nsec) / 1e9;
     clock_gettime(CLOCK_MONOTONIC, &frameDebugTime);
 
+    g_angle = (iTime * 0.1) * PI ;
+    iMouse = (vec2){iTime * 1.5 ,1.5}; 
+    //iMouse = (vec2){0. ,2.}; 
+    //g_lightSource = (vec3){sin(iTime * 0.5) * 5. + 1., sin(iTime * 0.5) * 3., cos(iTime * 0.5) * 5. + 1.}; 
+
+
+
     //display frame
     //printf("\033[H"); //move cursor to top left
     display(rows, columns); 
