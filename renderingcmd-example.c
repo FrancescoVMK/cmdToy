@@ -426,8 +426,6 @@ const float g_speculareScale = 1.0;
 const float g_diffiuseScale = 0.7;
 const float g_ambientscale = 0.5;
 
-const int g_maxThreadNumber = 10;
-
 //shapes 
 Point sdfSphere(vec3 p, vec3 center, float radius, vec4 color, vec3 rotation, vec3 pivot, int currentId){
 
