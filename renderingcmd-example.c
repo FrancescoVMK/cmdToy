@@ -1189,7 +1189,7 @@ int main(int argc, char *argv[]) {
       break;
     case 1: //line mode
       printf("1 display line mode\n");
-      g_bufferLenght = columns * g_pixeLenght + columns + 1; 
+      g_bufferLenght = (columns + 1) * g_pixeLenght;
       display = displayGridLine;
       break;
     case 2: //frame mode
@@ -1229,8 +1229,12 @@ int main(int argc, char *argv[]) {
   
   if(g_bufferLenght > 0){
     g_printBuffer = (char *)malloc(g_bufferLenght);
+  }
+  
+  if(g_bufferLenght > (columns + 1) * g_pixeLenght){
+    printf("inizialize buffer\n");
     inzialazePrintBuffer(rows, columns);//preplace the \n in the buffer at the right position
-  }    
+  }
   printf("Start in 2 sec\n");
     
   sleep(2);
@@ -1270,7 +1274,7 @@ int main(int argc, char *argv[]) {
     double frameTime = (frameEndTime.tv_sec - frameDebugTime.tv_sec) + 
                         (frameEndTime.tv_nsec - frameDebugTime.tv_nsec) / 1e9;
     //printf("Time taken: %f seconds\n", frameTime); //display debug info
-    //printf("FPS %f \n", 1/frameTime); //display debug info
+    printf("FPS %f \n", 1/frameTime); //display debug info
   }
 
   return 0;

@@ -717,8 +717,13 @@ int main(int argc, char *argv[]) {
   
   if(g_bufferLenght > 0){
     g_printBuffer = (char *)malloc(g_bufferLenght);
+  }
+  
+  if(g_bufferLenght > (columns + 1) * g_pixeLenght){
+    printf("inizialize buffer\n");
     inzialazePrintBuffer(rows, columns);//preplace the \n in the buffer at the right position
-  }    
+  }
+     
   printf("Start in 2 sec\n");
     
   sleep(2);
