@@ -751,6 +751,7 @@ int main(int argc, char *argv[]) {
     double frameTime = (frameEndTime.tv_sec - frameDebugTime.tv_sec) + 
                         (frameEndTime.tv_nsec - frameDebugTime.tv_nsec) / 1e9;
     //printf("Time taken: %f seconds\n", frameTime); //display debug info
+    //printf("FPS %f \n", 1/frameTime); //display debug info
   }
 
   return 0;
