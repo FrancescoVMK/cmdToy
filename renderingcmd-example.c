@@ -774,12 +774,11 @@ Point rayMarch(vec3 ro, vec3 rd, float maxDist){
 
 
 Point rayMarchShadow(vec3 ro, vec3 rd, float maxDist, int currentShapeId){
-
+  /*
   float t = 0.1;
   Point minDistP = (Point){maxDist, g_backGroundColor, -1};
   for( int i=0; i<256 && t<maxDist; i++ ){
     Point h = map(vec3_add(ro, vec3_scale(rd, t)), currentShapeId);
-
     if(h.dist < g_min_dist)
       return h;
              
@@ -788,7 +787,40 @@ Point rayMarchShadow(vec3 ro, vec3 rd, float maxDist, int currentShapeId){
   }
     
   return minDistP;
+  */
 
+  int jShapes = -1;
+    
+  Point p;
+  float dist = 0.1;
+  Point oldP = (Point){g_max_dist, g_backGroundColor, -1};
+  float firstDist;
+  
+
+
+ 
+  for( int i=0; i<256 && dist<maxDist; i++ ){
+    p = map(vec3_add(ro, vec3_scale(rd, dist)), jShapes);
+    if(p.dist <= g_min_dist){
+      if(p.color.k >= 1.0){ 
+        return p;
+
+      }else{
+        oldP.color = vec4_mix(oldP.color, p.color, p.color.k);
+        if(oldP.dist >= g_max_dist){
+          oldP.dist = p.dist;  
+          //printf("| %f %f |",firstDist, p.dist);       
+          oldP.shapeId = p.shapeId;
+        }
+        jShapes = p.shapeId;
+      }
+    }
+
+    dist += p.dist;
+  }
+  
+  return oldP;
+  
 
 }
 
@@ -895,7 +927,11 @@ vec3 render(vec2* uv){
 
     if(pointShadow.dist < 1.){
 
-      color = vec3_mix(vec3_scale((vec3){pointShadow.color.x, pointShadow.color.y, pointShadow.color.z}, pointShadow.color.k), vec3_scale(color, pointShadow.dist),  pointShadow.color.k);
+      color = vec3_mix(
+        vec3_scale((vec3){pointShadow.color.x, pointShadow.color.y, pointShadow.color.z}, 1.), 
+        vec3_scale(color, pointShadow.dist),  
+        
+        pointShadow.color.k);
 
     }   
   }
