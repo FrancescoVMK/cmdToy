@@ -64,7 +64,7 @@ A basic raymarching shader is included baldy made by me. For reference, see: [Sh
   - [ ] See if passing result by reference is better or worse
   - [ ] Create a documentation to help port shaderToy shaders to cmdToy
 - **Textures**:
-  - [ ] Implement `iChannel` support.
+  - [ ] Implement `iChannel` support for buffer textures and keyboard.
 - **Threads**:
   - [ ] Optimize thread management.
 - **Colors**
