@@ -3,11 +3,10 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <math.h>
-#include <linux/time.h>
+#include <time.h>
 #include <string.h>
 #include <uchar.h>
 #include <pthread.h>
-#include <stdint.h>
 
 //structs
 
@@ -82,7 +81,7 @@ static int g_thread_columns = 0;
 static int g_bufferLenght = 0;
 static char* g_printBuffer;
 static char* g_printBufferToPrint;
-pthread_t g_printThread;
+static pthread_t g_printThread;
 
 //math functions baldy implemented, should also be saparated in a library or something
 
@@ -411,22 +410,39 @@ vec3 vec3_reflect_p(vec3 * I, vec3 * N) {
 
 //shader code
 
-//frag color
 vec3 mainImage(vec2 * fragCoord){
-  //iResolution vec2
   vec3 fragColor; //out, its vec3 and not vec4 like in shader toy
-
+  fragColor = (vec3){1.000,1.000,1.000};
+  float aspectRatio = iResolution.x / iResolution.y;
+  //printf("%f", iResolution.x);
   // Normalized pixel coordinates (from 0 to 1)
-  // vec2 uv = fragCoord/iResolution.xy;
-  vec2 uv = vec2_div(*fragCoord, iResolution);
+  vec2 fragCordScaled = vec2_scale(*fragCoord, 2.0);
+  fragCordScaled.x = fragCordScaled.x / iResolution.x;
+  fragCordScaled.y = fragCordScaled.y / iResolution.y;
 
-  // Output to screen
-  fragColor = (vec3){uv.x, uv.y, abs(sin(iTime))};
+  vec2 uv = (vec2){fragCordScaled.x - 1., fragCordScaled.y - 1.};
+
+  // Correct for aspect ratio
+  uv.x = uv.x * aspectRatio;
+  
+
+  
+  vec2_scale_p(&uv, sin(iTime) * 50.);
+
+  uv.x = floor(uv.x);
+  uv.y = floor(uv.y);
+  if(fmod(uv.x + uv.y, 2.) == 0.){
+
+      if(sin(iTime + uv.x) + cos(iTime + uv.y) > sin(iTime))
+      fragColor = (vec3){.000,.000,.000};
+  }else{
+      if(fmod(uv.y, 2.) != 0.)
+      fragColor = (vec3){.000,.000,.000};
+  }
+
 
   return fragColor;
-  
 }
-
 
 //render code
 char *colorToColoredChar(vec3* color){
@@ -556,7 +572,7 @@ void* startThread(void* arg) {
 
 
 
-void* printThreaded(void* args) {
+void* printThreaded() {
   printf(g_printBufferToPrint);
   printf("\033[H"); 
 }
@@ -662,7 +678,7 @@ int main(int argc, char *argv[]) {
   struct timespec beginTime, frameDebugTime;
     
   //chose print mode
-  void (*display)(int, int);
+  void (*display)();
   int mode = 4;
   if(argc >= 2){
     mode = atoi(argv[1]);
@@ -678,7 +694,7 @@ int main(int argc, char *argv[]) {
       break;
     case 1: //line mode
       printf("1 display line mode\n");
-      g_bufferLenght = columns * g_pixeLenght + columns + 1; 
+      g_bufferLenght = (columns + 1) * g_pixeLenght;
       display = displayGridLine;
       break;
     case 2: //frame mode
@@ -724,7 +740,6 @@ int main(int argc, char *argv[]) {
     printf("inizialize buffer\n");
     inzialazePrintBuffer(rows, columns);//preplace the \n in the buffer at the right position
   }
-     
   printf("Start in 2 sec\n");
     
   sleep(2);
@@ -745,19 +760,26 @@ int main(int argc, char *argv[]) {
             (currentTime.tv_nsec - beginTime.tv_nsec) / 1e9;
     clock_gettime(CLOCK_MONOTONIC, &frameDebugTime);
 
+    //g_angle = (iTime * 0.1) * PI ;
+    iMouse = (vec2){iTime * 1.5 ,1.5}; 
+    //iMouse = (vec2){0. ,2.}; 
+    //g_lightSource = (vec3){sin(iTime * 0.5) * 5. + 1., sin(iTime * 0.5) * 3., cos(iTime * 0.5) * 5. + 1.}; 
+
+
+
     //display frame
     //printf("\033[H"); //move cursor to top left
     display(rows, columns); 
 
     //sleep(0.01);
     //fflush(stdout);
-    //printf("ITime: %f seconds", (float)clock());
+    //printf("ITime: %f seconds", (float)iTime);
     struct timespec frameEndTime;
     clock_gettime(CLOCK_MONOTONIC, &frameEndTime);
     double frameTime = (frameEndTime.tv_sec - frameDebugTime.tv_sec) + 
                         (frameEndTime.tv_nsec - frameDebugTime.tv_nsec) / 1e9;
     //printf("Time taken: %f seconds\n", frameTime); //display debug info
-    //printf("FPS %f \n", 1/frameTime); //display debug info
+    printf("FPS %f \n", 1/frameTime); //display debug info
   }
 
   return 0;
