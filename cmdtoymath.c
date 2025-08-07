@@ -3,7 +3,7 @@
 #include "cmdtoymath.h"
 
 
-  
+const float PI = 3.141592653589793;
   //functions
   
   float float_mix(float x, float y, float a) {

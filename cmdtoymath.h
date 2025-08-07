@@ -28,7 +28,7 @@ typedef struct Point {
 
 // --- Macro Definitions for Mathematical Calculations ---
 
-const static float PI = 3.141592653589793;
+extern const float PI;
 
 
 #define FLOAT_MIX(x, y, a) ((x) * (1.0f - (a)) + (y) * (a))

@@ -297,9 +297,9 @@ int cmdToyRender(int mode, int maxThreadNumber, vec3 (*mainImage)(vec2 * fragCoo
   //get resolution
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
   system("@cls||clear");//clear screen
-  int rows = w.ws_row -2;
+  int rows = w.ws_row -1;
   int columns = (int)w.ws_col/2;
-  iResolution = (vec2){columns, rows + 2}; 
+  iResolution = (vec2){columns, rows + 1}; 
 
   //show detected size
   printf("lines %d\n", rows);
