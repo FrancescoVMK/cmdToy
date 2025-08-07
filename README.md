@@ -29,7 +29,7 @@ cmdToy is a CPU-based command-line fragment shader renderer inspired by ShaderTo
 
 Compile with:
 
-    gcc renderingcmd.c -lm -O3 -o renderingcmd.out
+    gcc renderingcmd.c cmdtoymath.c cmdtoyengine.c -lm -O3 -o renderingcmd.out
 
 ---
 
@@ -37,7 +37,8 @@ Compile with:
 
 Run with a mode argument (0-4):
 
-    ./renderingcmd.out 4
+call in main, pass your definition of mainImage.
+cmdToyRender(int mode, int maxThreadNumber, vec3 (*mainImage)(vec2 * fragCoord));
 
 ---
 
@@ -57,7 +58,7 @@ A basic raymarching shader is included baldy made by me. For reference, see: [Sh
 
 - **Refactoring**: Poorly structured code needs cleanup.
 - **Math Functions**:
-  - [ ] Separate math utilities into a module.
+  - [x] Separate math utilities and rendering logic into separated librarys.
   - [ ] Add missing ShaderToy math functions.
   - [ ] Remove old macro function
   - [ ] Use only one naming scheme
